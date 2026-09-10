@@ -21,11 +21,7 @@
         <input matInput type="email" autocomplete="email" placeholder="seu@email.com" />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
-        <mat-label>Senha</mat-label>
-        <mat-icon matIconPrefix>lock_outline</mat-icon>
-        <input matInput type="password" autocomplete="new-password" />
-      </mat-form-field>
+      <app-password-field></app-password-field>
 
       <button mat-flat-button class="register-submit" type="submit">Criar conta</button>
     </form>

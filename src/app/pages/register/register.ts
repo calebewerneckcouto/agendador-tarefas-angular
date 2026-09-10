@@ -5,9 +5,10 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
+import { PasswordField } from '../../shared/components/password-field/password-field';
 
 @Component({
-  imports: [MatCardModule, MatAnchor, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule],
+  imports: [MatCardModule, MatAnchor, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule,PasswordField],
   selector: 'app-register',
   styleUrl: './register.scss',
   templateUrl: './register.html',
