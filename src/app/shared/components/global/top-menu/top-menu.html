@@ -6,5 +6,5 @@
 
     <span class="espacer"></span>
     <button mat-button>Entrar</button>
-    <button mat-button mat-flat-button routerLink="/register">Cadastrar</button>
+    <button mat-button mat-flat-button  [disabled]="estaNaRotaRegister()" routerLink="/register">Cadastrar</button>
 </mat-toolbar>
