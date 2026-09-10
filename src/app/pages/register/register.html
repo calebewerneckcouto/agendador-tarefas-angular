@@ -8,22 +8,22 @@
       <p>Cadastre-se para organizar e acompanhar suas tarefas.</p>
     </div>
 
-    <form class="register-form" novalidate>
+    <form class="register-form" novalidate [formGroup]="form">
       <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
         <mat-label>Nome completo</mat-label>
         <mat-icon matIconPrefix>person_outline</mat-icon>
-        <input matInput autocomplete="name" placeholder="Seu nome" />
+        <input matInput autocomplete="name" formControlName="fullName" placeholder="Seu nome" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
         <mat-label>E-mail</mat-label>
         <mat-icon matIconPrefix>mail_outline</mat-icon>
-        <input matInput type="email" autocomplete="email" placeholder="seu@email.com" />
+        <input matInput type="email" formControlName="email" autocomplete="email" placeholder="seu@email.com" />
       </mat-form-field>
 
-      <app-password-field></app-password-field>
+      <app-password-field [control]="passwordControl"></app-password-field>
 
-      <button mat-flat-button class="register-submit" type="submit">Criar conta</button>
+      <button mat-flat-button class="register-submit" type="submit" (click)="submit()">Criar conta</button>
     </form>
   </mat-card>
 </div>
