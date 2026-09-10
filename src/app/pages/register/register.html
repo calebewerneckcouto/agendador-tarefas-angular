@@ -1,0 +1,33 @@
+<div class="register-page">
+  <mat-card class="register-card" appearance="outlined">
+    <div class="register-brand">
+      <div class="register-brand__icon" aria-hidden="true">
+        <mat-icon>event_available</mat-icon>
+      </div>
+      <h1>Criar conta</h1>
+      <p>Cadastre-se para organizar e acompanhar suas tarefas.</p>
+    </div>
+
+    <form class="register-form" novalidate>
+      <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+        <mat-label>Nome completo</mat-label>
+        <mat-icon matIconPrefix>person_outline</mat-icon>
+        <input matInput autocomplete="name" placeholder="Seu nome" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+        <mat-label>E-mail</mat-label>
+        <mat-icon matIconPrefix>mail_outline</mat-icon>
+        <input matInput type="email" autocomplete="email" placeholder="seu@email.com" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+        <mat-label>Senha</mat-label>
+        <mat-icon matIconPrefix>lock_outline</mat-icon>
+        <input matInput type="password" autocomplete="new-password" />
+      </mat-form-field>
+
+      <button mat-flat-button class="register-submit" type="submit">Criar conta</button>
+    </form>
+  </mat-card>
+</div>
