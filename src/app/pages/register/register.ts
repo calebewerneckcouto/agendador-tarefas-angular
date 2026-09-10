@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { PasswordField } from '../../shared/components/password-field/password-field';
-import { ReactiveFormsModule,FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule,FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   imports: [MatCardModule, MatAnchor, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule, PasswordField,ReactiveFormsModule],
@@ -19,9 +19,9 @@ export class RegisterComponent {
   form: FormGroup;
   constructor(private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
-      fullName: [''],
-      email: [''],
-      password: ['']
+      fullName: ['', Validators.required],
+      email: ['',Validators.required, Validators.email],
+      password: ['',Validators.required]
     });
   }
 
@@ -30,6 +30,12 @@ export class RegisterComponent {
   }
 
   submit(){
-    console.log(this.form.value)
+
+      if(this.form.invalid){
+        this.form.markAllAsTouched();
+        return 
+      }
+
+    console.log("formulario submetido",this.form.value)
   }
 }

@@ -23,7 +23,8 @@
 
       <app-password-field [control]="passwordControl"></app-password-field>
 
-      <button mat-flat-button class="register-submit" type="submit" (click)="submit()">Criar conta</button>
+      <button mat-flat-button class="register-submit" type="submit"
+      [disabled]="form.invalid" (click)="submit()">Criar conta</button>
     </form>
   </mat-card>
 </div>
