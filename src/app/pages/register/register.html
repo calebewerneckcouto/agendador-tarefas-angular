@@ -12,8 +12,8 @@
       <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
         <mat-label>Nome completo</mat-label>
         <mat-icon matIconPrefix>person_outline</mat-icon>
-        <input matInput autocomplete="name" formControlName="fullName" placeholder="Seu nome" />
-        <mat-error *ngIf="form.get('fullName')?.errors?.['required']">O nome é obrigatório</mat-error>
+        <input matInput autocomplete="name" formControlName="nome" placeholder="Seu nome" />
+        <mat-error *ngIf="form.get('nome')?.errors?.['required']">O nome é obrigatório</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
@@ -24,9 +24,9 @@
         <mat-error *ngIf="form.get('email')?.errors?.['email']">Digite um e-mail válido</mat-error>
       </mat-form-field>
 
-      <app-password-field [control]="passwordControl"></app-password-field>
+      <app-password-field [control]="senhaControl"></app-password-field>
 
-      <button mat-flat-button class="register-submit" type="submit">Criar conta</button>
+      <button mat-flat-button class="register-submit" type="submit" (click)="submit()">Criar conta</button>
     </form>
   </mat-card>
 </div>

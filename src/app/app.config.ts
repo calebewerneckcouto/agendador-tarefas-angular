@@ -7,6 +7,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideAnimationsAsync(),
-    provideRouter(routes)
+    provideRouter(routes),
+    
   ]
 };
