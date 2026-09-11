@@ -9,17 +9,25 @@ import { PasswordField } from '../../shared/components/password-field/password-f
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
 
 @Component({
-  imports: [MatCardModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule, PasswordField, ReactiveFormsModule, CommonModule],
+  imports: [MatCardModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule, PasswordField, ReactiveFormsModule, CommonModule,MatProgressSpinnerModule],
   selector: 'app-register',
   styleUrl: './register.scss',
   templateUrl: './register.html',
   encapsulation: ViewEncapsulation.None
 })
 export class RegisterComponent {
+  isLoading=false;
   form: FormGroup;
-  constructor(private formBuilder: FormBuilder, private userService: UserService) {
+  constructor(private formBuilder: FormBuilder,
+     private userService: UserService,
+     private router: Router
+
+  ) {
     this.form = this.formBuilder.group({
       nome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -39,13 +47,17 @@ export class RegisterComponent {
 
     const formData = this.form.value;
 
-    this.userService.register(formData).subscribe({
+    this.isLoading = true;
+
+    this.userService.register(formData).pipe(finalize(() => this.isLoading = false))
+    .subscribe({
       next:(response) => {
-        console.log(`Usuario registrado com sucesso!`,response)
+        this.router.navigate(['/login'])
       },
       error:(error)=>{
         console.error(`Erro ao Registrar usuario`,error)
       }
+      
     })
 
     

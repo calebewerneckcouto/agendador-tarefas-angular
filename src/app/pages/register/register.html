@@ -26,7 +26,13 @@
 
       <app-password-field [control]="senhaControl"></app-password-field>
 
-      <button mat-flat-button class="register-submit" type="submit" (click)="submit()">Criar conta</button>
+      <button mat-flat-button class="register-submit" [disabled]="form.invalid || isLoading" type="submit" (click)="submit()">
+        <span  class="cad-button-content" >
+          {{isLoading?"Cadastrando...":"Cadastrar"}}
+          @if (isLoading){<mat-spinner diameter="20"></mat-spinner>}
+        </span>
+
+        </button>
     </form>
   </mat-card>
 </div>
