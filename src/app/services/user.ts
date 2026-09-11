@@ -2,6 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 
+
+export interface UserLoginPayload {
+
+    email: string,
+    senha: string,
+
+
+}
+
+
 interface UserRegistryPayload {
     nome: string,
     email: string,
@@ -48,5 +58,9 @@ export class UserService {
 
     register(body: UserRegistryPayload): Observable<UserRegisterResponse> {
         return this.http.post<UserRegisterResponse>(`${this.apiUrl}/usuario`, body);
+    }
+
+    login(body: UserLoginPayload): Observable<string> {
+        return this.http.post<string>(`${this.apiUrl}/usuario/login`, body,{responseType: 'text' as 'json'});
     }
 }

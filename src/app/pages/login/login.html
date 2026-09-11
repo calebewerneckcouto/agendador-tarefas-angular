@@ -1,0 +1,33 @@
+<div class="login-page">
+  <mat-card class="register-card" appearance="outlined">
+    <div class="register-brand">
+      <div class="register-brand__icon" aria-hidden="true">
+        <mat-icon>event_available</mat-icon>
+      </div>
+      <h1>Entrar</h1>
+      <p>Acesse sua conta para gerenciar suas tarefas.</p>
+    </div>
+
+    <form class="register-form" novalidate [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+        <mat-label>E-mail</mat-label>
+        <mat-icon matIconPrefix>mail_outline</mat-icon>
+        <input matInput type="email" formControlName="email" autocomplete="email" placeholder="seu@email.com" />
+        @if (emailErros) {
+          <mat-error>{{ emailErros }}</mat-error>
+        }
+      </mat-form-field>
+
+      <app-password-field [control]="senhaControl"></app-password-field>
+
+      <button mat-flat-button class="register-submit" [disabled]="form.invalid || isLoading" type="submit">
+        <span class="cad-button-content">
+          {{ isLoading ? 'Entrando...' : 'Entrar' }}
+          @if (isLoading) {
+            <mat-spinner diameter="20"></mat-spinner>
+          }
+        </span>
+      </button>
+    </form>
+  </mat-card>
+</div>

@@ -5,6 +5,6 @@
     <a mat-button>Contatos</a>
 
     <span class="espacer"></span>
-    <button mat-button>Entrar</button>
+    <button mat-button  [disabled]="estaNaRotaLogin()" routerLink="/login">Entrar</button>
     <button mat-button mat-flat-button  [disabled]="estaNaRotaRegister()" routerLink="/register">Cadastrar</button>
 </mat-toolbar>
