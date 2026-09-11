@@ -24,7 +24,7 @@
         <mat-error *ngIf="form.get('email')?.errors?.['email']">Digite um e-mail válido</mat-error>
       </mat-form-field>
 
-      <app-password-field [control]="senhaControl"></app-password-field>
+      <app-password-field  [placeholder]="'Cadastre a sua senha'"   [control]="senhaControl"></app-password-field>
 
       <button mat-flat-button class="register-submit" [disabled]="form.invalid || isLoading" type="submit" >
         <span  class="cad-button-content" >
