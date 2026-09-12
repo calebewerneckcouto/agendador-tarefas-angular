@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserLoginPayload, UserService } from '../../services/user';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
+import { Auth } from '../../services/auth';
 
 
 
@@ -31,6 +32,7 @@ export class LoginComponent {
     private formBuilder: FormBuilder,
     private userService: UserService,
     private router: Router,
+    private authService:Auth,
   ) {
     this.form = this.formBuilder.group({
       email: this.formBuilder.control ('', { validators: [Validators.required, Validators.email],nonNullable:true}),
@@ -59,7 +61,8 @@ export class LoginComponent {
 
     this.isLoading = true;
     this.userService.login(formData).pipe(finalize(() => (this.isLoading = false))).subscribe({
-      next: () => {
+      next: (response) => {
+        this.authService.saveToken(response)
         this.router.navigate(['/']);
       },
       error: (error) => {
