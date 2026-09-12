@@ -1,13 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { RegisterComponent } from './pages/register/register';
-import { TopMenu } from "./shared/components/global/top-menu/top-menu";
+import { TopMenu } from './shared/components/global/top-menu/top-menu';
+import { FooterComponent } from './shared/components/global/footer/footer';
+
 
 @Component({
-  imports: [RouterOutlet, TopMenu],
   selector: 'app-root',
-  styleUrl: './app.scss',
+  imports: [RouterOutlet, TopMenu, FooterComponent],
   templateUrl: './app.html',
+  styleUrl: './app.scss',
 })
 export class App {
   protected readonly title = signal('agendador-tarefas');

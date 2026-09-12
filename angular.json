@@ -10,14 +10,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss",
-          "assets":[
-            "src/assets",
-            {
-              "glob":"**/*",
-              "input":"public"
-            }
-          ]
+          "style": "scss"
         }
       },
       "root": "",

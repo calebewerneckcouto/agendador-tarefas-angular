@@ -1,0 +1,82 @@
+<div class="home">
+  <section class="home-hero">
+    <div class="hero-text">
+      <p class="hero-kicker">Deadline Javanauta</p>
+      <h1>Organize suas tarefas de forma simples e poderosa</h1>
+      <p class="hero-lead">
+        Tenha mais produtividade e clareza no seu dia a dia com o agendador de tarefas.
+        Planeje, acompanhe prazos e foque no que importa.
+      </p>
+
+      <div class="hero-actions">
+        <button mat-flat-button type="button" routerLink="/register">Comece agora</button>
+        <button mat-stroked-button type="button" routerLink="/login">Já tenho conta</button>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <img [src]="imgHero" alt="Ilustração de organização de tarefas" />
+    </div>
+  </section>
+
+  <section class="home-section" id="recursos">
+    <h2>Por que usar o Deadline</h2>
+    <p class="section-lead">Tudo o que você precisa para manter a rotina sob controle.</p>
+
+    <div class="feature-grid">
+      <mat-card class="feature-card" appearance="outlined">
+        <mat-icon>event_available</mat-icon>
+        <h3>Agenda clara</h3>
+        <p>Visualize o que precisa ser feito hoje, nesta semana e nos próximos prazos.</p>
+      </mat-card>
+      <mat-card class="feature-card" appearance="outlined">
+        <mat-icon>notifications_active</mat-icon>
+        <h3>Lembretes</h3>
+        <p>Receba avisos das tarefas que estão chegando para não perder nenhum compromisso.</p>
+      </mat-card>
+      <mat-card class="feature-card" appearance="outlined">
+        <mat-icon>check_circle</mat-icon>
+        <h3>Produtividade</h3>
+        <p>Marque o que já foi concluído e mantenha o foco no que ainda está pendente.</p>
+      </mat-card>
+    </div>
+  </section>
+
+  <section class="home-section home-section--muted" id="precos">
+    <h2>Preços</h2>
+    <p class="section-lead">Comece grátis e evolua quando precisar.</p>
+
+    <div class="price-grid">
+      <mat-card class="price-card" appearance="outlined">
+        <h3>Gratuito</h3>
+        <p class="price">R$ 0</p>
+        <p>Ideal para organizar a rotina pessoal.</p>
+        <ul>
+          <li>Cadastro de tarefas</li>
+          <li>Acesso pelo navegador</li>
+          <li>Lembretes essenciais</li>
+        </ul>
+        <button mat-stroked-button type="button" routerLink="/register">Criar conta</button>
+      </mat-card>
+      <mat-card class="price-card price-card--highlight" appearance="outlined">
+        <h3>Profissional</h3>
+        <p class="price">Em breve</p>
+        <p>Para quem quer acompanhar prazos com mais recursos.</p>
+        <ul>
+          <li>Tudo do plano gratuito</li>
+          <li>Prioridades e status</li>
+          <li>Notificações avançadas</li>
+        </ul>
+        <button mat-flat-button type="button" routerLink="/register">Quero começar</button>
+      </mat-card>
+    </div>
+  </section>
+
+  <section class="home-section" id="contato">
+    <h2>Contato</h2>
+    <p class="section-lead">Dúvidas sobre o agendador? Fale com a gente.</p>
+    <a class="contact-link" href="mailto:contato@javanauta.com.br">contato@javanauta.com.br</a>
+  </section>
+
+  
+</div>
