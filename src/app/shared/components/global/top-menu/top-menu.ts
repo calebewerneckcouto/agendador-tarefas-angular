@@ -1,9 +1,9 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { NavigationEnd, Router, RouterModule, RouterState } from '@angular/router';
-import { filter, Subscription } from 'rxjs';
+import { Router, RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { RouterStateService } from '../../../../core/router/router-state';
 import { MatCardAvatar } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
@@ -49,15 +49,15 @@ export class TopMenu implements OnInit, OnDestroy {
   }
 
 
-  get estaLogado(): boolean {
-    return this.authService.isLoggedIn();
-  }
+  readonly estaLogado = computed(() => this.authService.loggedIn());
 
+  pegarInicialUsuario(): string {
+    const user = this.authService.getUser() ?? this.userService.getUser();
+    if (user?.nome) {
+      return user.nome.charAt(0).toUpperCase();
+    }
 
-  pegarInicialUsuario():string{
-    const token = this.authService.getToken() || ''
-    this.userService.getEmailFromToken(token)
-    return 'F'
+    return '?';
   }
 
 

@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserLoginPayload, UserService } from '../../services/user';
 import { Router } from '@angular/router';
-import { finalize } from 'rxjs';
+import { finalize, switchMap } from 'rxjs';
 import { Auth } from '../../services/auth';
 
 
@@ -68,16 +68,15 @@ export class LoginComponent {
     this.isLoading = true;
 
 
-    this.userService.login(formData).pipe(finalize(() => (this.isLoading = false))).subscribe({
-      next: (response) => {
-        this.authService.saveToken(response)
-        this.userService.getUserByEmail(response).subscribe({
-          next:(user)=>{
-            this.authService.saveUser(user)
-          }
-        }
-          
-        )
+    this.userService.login(formData).pipe(
+      switchMap((token) => {
+        this.authService.saveToken(token);
+        return this.userService.getUserByEmail(token);
+      }),
+      finalize(() => (this.isLoading = false)),
+    ).subscribe({
+      next: (user) => {
+        this.authService.saveUser(user);
         this.router.navigate(['/tasks']);
       },
       error: (error) => {

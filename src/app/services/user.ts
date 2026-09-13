@@ -66,15 +66,14 @@ export class UserService {
     }
 
     login(body: UserLoginPayload): Observable<string> {
-        return this.http.post<string>(`${this.apiUrl}/usuario/login`, body, { responseType: 'text' as 'json' }).pipe(
-            map((token) => this.limparToken(token)),
+        return this.http.post<string | Record<string, string>>(`${this.apiUrl}/usuario/login`, body).pipe(
+            map((response) => this.limparToken(this.extrairToken(response))),
         );
     }
 
     getUserByEmail(token: string): Observable<UserResponse> {
         const tokenLimpo = this.limparToken(token);
         const email = this.getEmailFromToken(tokenLimpo);
-        console.log(tokenLimpo)
 
         if (!email) {
             throw new Error('Token Invalido!');
@@ -82,16 +81,13 @@ export class UserService {
 
         const headers = new HttpHeaders({
             Authorization: `Bearer ${tokenLimpo}`,
-           
         });
 
         return this.http.get<UserResponse>(`${this.apiUrl}/usuario`, {
             headers,
             params: { email },
-             
         }).pipe(
             tap((user) => this.user.set(user)),
-             
         );
     }
 
@@ -104,12 +100,30 @@ export class UserService {
         }
     }
 
+    private extrairToken(response: string | Record<string, string> | null): string {
+        if (response && typeof response === 'object') {
+            return response['authorization'] ?? response['token'] ?? '';
+        }
+
+        const texto = (response ?? '').trim();
+        if (texto.startsWith('{')) {
+            try {
+                const json = JSON.parse(texto) as Record<string, string>;
+                return json['authorization'] ?? json['token'] ?? texto;
+            } catch {
+                return texto;
+            }
+        }
+
+        return texto;
+    }
+
     private limparToken(token: string): string {
         let valor = (token ?? '').trim();
         if ((valor.startsWith('"') && valor.endsWith('"')) || (valor.startsWith("'") && valor.endsWith("'"))) {
             valor = valor.slice(1, -1).trim();
         }
-        if (valor.toLowerCase().startsWith('bearer ')) {
+        while (valor.toLowerCase().startsWith('bearer ')) {
             valor = valor.slice(7).trim();
         }
         return valor;

@@ -1,7 +1,7 @@
 <mat-toolbar class="app-top-menu-toolbar">
     <span class="logo"><a routerLink="/"><img [src]="appLogo" alt="logo" class="logo-img" /></a></span>
 
-    @if(!estaLogado){
+    @if(!estaLogado()){
     <span class="espacer"></span>
     <a mat-button routerLink="/" fragment="precos">Preços</a>
     <a mat-button routerLink="/" fragment="contato">Contato</a>
@@ -12,7 +12,8 @@
 
     }
 
-    @if(estaLogado){
+    @if(estaLogado()){
+        <span class="espacer"></span>
         <div mat-card-avatar  [matMenuTriggerFor]="menu" class="avatar-usuario">{{pegarInicialUsuario()}}</div>
       
         <mat-menu #menu="matMenu">

@@ -8,8 +8,10 @@
         <a routerLink="/">Início</a>
         <a routerLink="/" fragment="precos">Preços</a>
         <a routerLink="/" fragment="contato">Contato</a>
-        <a routerLink="/login">Entrar</a>
-        <a routerLink="/register">Cadastrar</a>
+        @if (!authService.loggedIn()) {
+          <a routerLink="/login">Entrar</a>
+          <a routerLink="/register">Cadastrar</a>
+        }
       </nav>
     </div>
     <p class="footer-copy">© 2026 Deadline Javanauta — Agendador de Tarefas. Todos os direitos reservados.</p>
