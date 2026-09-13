@@ -40,6 +40,12 @@ export class LoginComponent {
     });
   }
 
+  ngOnInit():void{
+    if(this.authService.isLoggedIn()){
+      this.router.navigate(['/tasks'])
+    }
+  }
+
   get emailErros(): string | null {
     const emailControl = this.form.get('email');
     if (emailControl?.hasError('required')) return 'A informação do e-mail é obrigatorio';
@@ -60,10 +66,19 @@ export class LoginComponent {
     const formData = this.form.value as UserLoginPayload;
 
     this.isLoading = true;
+
+
     this.userService.login(formData).pipe(finalize(() => (this.isLoading = false))).subscribe({
       next: (response) => {
         this.authService.saveToken(response)
-        this.router.navigate(['/']);
+        this.userService.getUserByEmail(response).subscribe({
+          next:(user)=>{
+            this.authService.saveUser(user)
+          }
+        }
+          
+        )
+        this.router.navigate(['/tasks']);
       },
       error: (error) => {
         console.error(`Erro ao fazer login`, error);

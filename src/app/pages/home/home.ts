@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-home',
@@ -12,4 +13,14 @@ import { RouterLink } from '@angular/router';
 })
 export class HomeComponent {
   imgHero = 'assets/imagem-hero.svg';
+
+  constructor(private authService:Auth,private router:Router){
+    
+  }
+
+    ngOnInit():void{
+    if(this.authService.isLoggedIn()){
+      this.router.navigate(['/tasks'])
+    }
+  }
 }

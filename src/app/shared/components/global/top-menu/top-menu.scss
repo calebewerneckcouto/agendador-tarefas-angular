@@ -30,3 +30,16 @@
     border-radius: 0;
     height: 100%;
 }
+
+.avatar-usuario{
+     background-color: rgb(20, 33, 226);
+     color: white;
+     font-weight: 600;
+     width: 40px;
+     height: 40px;
+     border-radius: 50%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+}

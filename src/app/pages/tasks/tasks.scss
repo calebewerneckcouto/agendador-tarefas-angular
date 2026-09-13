@@ -1,0 +1,38 @@
+:host {
+  display: block;
+}
+
+.tasks-component {
+  min-height: calc(100vh - 180px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+
+  .task-card {
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 8px 20px rgba(29, 11, 29, 0.12);
+    padding: 1rem;
+  }
+
+  .task-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    p {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-weight: 600;
+    }
+  }
+}

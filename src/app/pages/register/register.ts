@@ -12,6 +12,7 @@ import { UserService } from '../../services/user';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
+import { Auth } from '../../services/auth';
 
 @Component({
   imports: [MatCardModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule, PasswordField, ReactiveFormsModule, CommonModule,MatProgressSpinnerModule],
@@ -25,7 +26,8 @@ export class RegisterComponent {
   form: FormGroup;
   constructor(private formBuilder: FormBuilder,
      private userService: UserService,
-     private router: Router
+     private router: Router,
+     private authService:Auth
 
   ) {
     this.form = this.formBuilder.group({
@@ -34,6 +36,14 @@ export class RegisterComponent {
       senha: ['', Validators.required]
     });
   }
+
+
+    
+      ngOnInit():void{
+      if(this.authService.isLoggedIn()){
+        this.router.navigate(['/tasks'])
+      }
+    }
 
   get senhaControl(): FormControl {
     return this.form.get('senha') as FormControl
