@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0 8px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.dialog-form mat-form-field {
+  width: 100%;
+}

@@ -33,23 +33,38 @@ interface UserRegistryPayload {
 
 }
 
+export interface Telefone {
+    id?: number;
+    numero: string;
+    ddd: string;
+}
+
+export interface Endereco {
+    id?: number;
+    rua: string;
+    numero: string;
+    complemento: string;
+    cidade: string;
+    estado: string;
+    cep: string;
+}
+
+export interface ViaCepResponse {
+    cep?: string;
+    logradouro?: string;
+    complemento?: string;
+    bairro?: string;
+    localidade?: string;
+    uf?: string;
+    estado?: string;
+}
+
 export interface UserResponse {
-    nome: string,
-    email: string,
-    enderecos: [{
-        rua: string,
-        numero: number,
-        complemento: string,
-        cidade: string,
-        estado: string,
-        cep: string
-    }
-    ] | null,
-    telefone: [{
-        numero: string,
-        ddd: string
-    }
-    ] | null
+    nome: string;
+    email: string;
+    enderecos?: Endereco[] | null;
+    telefones?: Telefone[] | null;
+    telefone?: Telefone[] | null;
 }
 
 @Service()
@@ -59,7 +74,8 @@ export class UserService {
 
     private jwtHelper = new JwtHelperService();
 
-    user = signal<UserResponse | null>(null)
+    private _user = signal<UserResponse | null>(null)
+    readonly user = this._user.asReadonly();
 
     register(body: UserRegistryPayload): Observable<UserResponse> {
         return this.http.post<UserResponse>(`${this.apiUrl}/usuario`, body);
@@ -87,9 +103,54 @@ export class UserService {
             headers,
             params: { email },
         }).pipe(
-            tap((user) => this.user.set(user)),
+            map((user) => this.normalizeUser(user)),
+            tap((user) => this.setUser(user)),
         );
     }
+
+    saveTelefone(body: { numero: string; ddd: string }): Observable<Telefone> {
+        return this.http.post<Telefone>(`${this.apiUrl}/usuario/telefone`, body);
+    }
+
+    saveEndereco(body: Endereco): Observable<Endereco> {
+        return this.http.post<Endereco>(`${this.apiUrl}/usuario/endereco`, body);
+    }
+
+    buscarCep(cep: string): Observable<ViaCepResponse> {
+        const cepLimpo = cep.replace(/\D/g, '');
+        return this.http.get<ViaCepResponse>(`${this.apiUrl}/usuario/endereco/${cepLimpo}`);
+    }
+
+    updateEndereco(id: number, body: Endereco): Observable<Endereco> {
+        return this.http.put<Endereco>(`${this.apiUrl}/usuario/endereco`, body, {
+            params: { id: String(id) },
+        });
+    }
+
+    updateTelefone(id: number, body: { numero: string; ddd: string }): Observable<Telefone> {
+        return this.http.put<Telefone>(`${this.apiUrl}/usuario/telefone`, body, {
+            params: { id: String(id) },
+        });
+    }
+
+    deleteTelefone(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/usuario/telefone`, {
+            params: { id: String(id) },
+        });
+    }
+
+    deleteEndereco(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/usuario/endereco`, {
+            params: { id: String(id) },
+        });
+    }
+
+    private normalizeUser(user: UserResponse): UserResponse {
+        const telefones = user.telefones ?? user.telefone ?? [];
+        const enderecos = user.enderecos ?? [];
+        return { ...user, telefones, telefone: telefones, enderecos };
+    }
+
 
     getEmailFromToken(token: string): string | null {
         try {
@@ -133,6 +194,10 @@ export class UserService {
     getUser(): UserResponse | null {
         const user = this.user()
         return this.user()
+    }
+
+    setUser(data: UserResponse | null):void {
+       this._user.set(data)
     }
 
 }

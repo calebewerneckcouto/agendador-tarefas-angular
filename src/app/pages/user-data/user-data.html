@@ -10,15 +10,73 @@
                 <mat-label>Nome</mat-label>
                 <input matInput formControlName="nome">
             </mat-form-field>
-              <mat-form-field class="full-width">
+            <mat-form-field class="full-width">
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="email">
             </mat-form-field>
         </form>
+
+        <h3>Endereços</h3>
+
+        <mat-list>
+            @for (endereco of user()?.enderecos ?? []; track endereco.id ?? endereco.cep) {
+            <div class="item-wrapper">
+                <div class="item-text">
+                    <mat-list-item>
+                        {{ endereco.rua }}, {{ endereco.numero }}
+                        @if (endereco.complemento) {
+                            - {{ endereco.complemento }}
+                        }
+                        — {{ endereco.cidade }}/{{ endereco.estado }} CEP {{ endereco.cep }}
+                    </mat-list-item>
+                </div>
+                <div class="item-action">
+                    <button mat-icon-button type="button" (click)="editarEndereco(endereco)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button type="button" (click)="deletarEndereco(endereco)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+            }
+        </mat-list>
+
+        <button mat-flat-button (click)="cadastrarEndereco()">Adicionar Endereço</button>
+
+        <h3>Telefones</h3>
+
+        <mat-list>
+            @for (telefone of user()?.telefones ?? user()?.telefone ?? []; track telefone.id ?? telefone.numero) {
+
+            <div class="item-wrapper">
+                <div class="item-text">
+                    <mat-list-item>{{ telefone.ddd }} {{ telefone.numero }}</mat-list-item>
+                </div>
+                <div class="item-action">
+                    <button mat-icon-button (click)="editarTelefone(telefone)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+
+                     <button mat-icon-button type="button" (click)="deletarTelefone(telefone)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+
+
+
+            </div>
+
+            }
+
+
+
+        </mat-list>
+
+        <button mat-flat-button (click)="cadastrarTelefone()">Adicionar Telefone</button>
     </mat-card-content>
-    <mat-card-actions>
-        <button mat-button>Leran More</button>
-    </mat-card-actions>
+
+
 
 
 </mat-card>
