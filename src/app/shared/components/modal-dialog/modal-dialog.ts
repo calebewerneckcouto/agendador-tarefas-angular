@@ -10,12 +10,16 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTimepickerModule } from '@angular/material/timepicker';
 import { UserService } from '../../../services/user';
 
 export interface DialogFieldConfig {
   name: string;
   label: string;
-  value?: string;
+  value?: string | Date | number | null;
+  type?: 'text' | 'number' | 'date' | 'time' | 'datetime' | 'textarea';
+  layout?: 'full' | 'half';
   validators?: ValidatorFn[];
 }
 
@@ -33,6 +37,8 @@ export interface DialogData {
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
+    MatDatepickerModule,
+    MatTimepickerModule,
   ],
   selector: 'app-modal-dialog',
   styleUrl: './modal-dialog.scss',
@@ -50,14 +56,22 @@ export class ModalDialog {
   readonly fields: DialogFieldConfig[] = this.data.formConfig;
   readonly form: FormGroup = this.formBuilder.group(this.buildControls());
 
-  private buildControls(): Record<string, [string, ValidatorFn[]]> {
-    const controls: Record<string, [string, ValidatorFn[]]> = {};
+  private buildControls(): Record<string, [string | Date | number, ValidatorFn[]]> {
+    const controls: Record<string, [string | Date | number, ValidatorFn[]]> = {};
 
     this.fields.forEach((field) => {
       controls[field.name] = [field.value ?? '', field.validators ?? []];
     });
 
     return controls;
+  }
+
+  inputType(field: DialogFieldConfig): string {
+    if (field.type === 'datetime') {
+      return 'datetime-local';
+    }
+
+    return field.type ?? 'text';
   }
 
   onCepInformado(fieldName: string): void {

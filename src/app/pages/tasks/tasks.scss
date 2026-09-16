@@ -2,37 +2,235 @@
   display: block;
 }
 
-.tasks-component {
+.tasks-page {
   min-height: calc(100vh - 180px);
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
   box-sizing: border-box;
+  color: #0f172a;
+}
 
-  .task-card {
-    max-width: 480px;
-    width: 100%;
-    box-shadow: 0 8px 20px rgba(29, 11, 29, 0.12);
-    padding: 1rem;
+.tasks-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
   }
 
-  .task-content {
+  button {
+    flex-shrink: 0;
+  }
+}
+
+.tasks-kicker {
+  margin: 0 0 8px;
+  color: #1565c0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tasks-lead,
+.tasks-count {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.tasks-count {
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.task-empty {
+  max-width: 520px;
+  margin: 24px auto 0;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+
+  mat-card-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    padding: 40px 28px;
+  }
 
-    p {
-      font-size: 1rem;
-      font-weight: 600;
-      line-height: 1.5;
-    }
+  h2 {
+    margin: 0 0 8px;
+    font-size: 1.35rem;
+  }
 
-    button {
-      padding: 12px 24px;
-      font-weight: 600;
-    }
+  p {
+    margin: 0 0 24px;
+    color: #64748b;
+    max-width: 360px;
+  }
+}
+
+.task-empty-icon {
+  width: 48px;
+  height: 48px;
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #1565c0;
+}
+
+.tasks-list {
+  display: grid;
+  gap: 16px;
+}
+
+.task-item {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 22px 24px 18px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: #bfdbfe;
+    box-shadow: 0 12px 28px rgba(21, 101, 192, 0.08);
+  }
+}
+
+.task-item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.task-item-title-wrap {
+  min-width: 0;
+
+  h2 {
+    margin: 8px 0 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    word-break: break-word;
+  }
+}
+
+.task-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.task-status--pending {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.task-status--notified {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.task-status--cancelled {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.task-when {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  color: #334155;
+
+  mat-icon {
+    color: #1565c0;
+  }
+
+  strong,
+  span {
+    display: block;
+    text-align: right;
+  }
+
+  strong {
+    font-size: 0.95rem;
+  }
+
+  span {
+    color: #64748b;
+    font-size: 0.85rem;
+  }
+}
+
+.task-description {
+  margin: 14px 0 0;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+  margin-top: 18px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.task-meta-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  margin-right: -8px;
+}
+
+@media (max-width: 700px) {
+  .tasks-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .task-item-top {
+    flex-direction: column;
+  }
+
+  .task-when div strong,
+  .task-when div span {
+    text-align: left;
   }
 }

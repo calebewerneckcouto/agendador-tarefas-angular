@@ -2,13 +2,31 @@
 <mat-dialog-content>
   <form [formGroup]="form" class="dialog-form">
     @for (field of fields; track field.name) {
-      <mat-form-field class="full-width">
+      <mat-form-field class="full-width" [class.field-half]="field.layout === 'half'">
         <mat-label>{{ field.label }}</mat-label>
-        <input
-          matInput
-          [formControlName]="field.name"
-          (blur)="onCepInformado(field.name)"
-          (keyup.enter)="onCepInformado(field.name)">
+
+        @if (field.type === 'date') {
+          <ng-container>
+            <input matInput [matDatepicker]="datepicker" [formControlName]="field.name">
+            <mat-datepicker-toggle [for]="datepicker" matSuffix />
+            <mat-datepicker #datepicker />
+          </ng-container>
+        } @else if (field.type === 'time') {
+          <ng-container>
+            <input matInput [matTimepicker]="timepicker" [formControlName]="field.name">
+            <mat-timepicker-toggle [for]="timepicker" matSuffix />
+            <mat-timepicker #timepicker />
+          </ng-container>
+        } @else if (field.type === 'textarea') {
+          <textarea matInput rows="5" [formControlName]="field.name"></textarea>
+        } @else {
+          <input
+            matInput
+            [type]="inputType(field)"
+            [formControlName]="field.name"
+            (blur)="onCepInformado(field.name)"
+            (keyup.enter)="onCepInformado(field.name)">
+        }
       </mat-form-field>
     }
   </form>
@@ -16,5 +34,4 @@
 <mat-dialog-actions align="end">
   <button mat-button type="button" (click)="onCancel()">Cancelar</button>
   <button mat-flat-button type="button" (click)="onSave()">Salvar</button>
- 
 </mat-dialog-actions>

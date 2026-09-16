@@ -3,16 +3,31 @@
 }
 
 .dialog-form {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 4px 0 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  padding: 8px 0 16px;
 }
 
 .full-width {
   width: 100%;
+  grid-column: 1 / -1;
 }
 
-.dialog-form mat-form-field {
-  width: 100%;
+.dialog-form mat-form-field.field-half {
+  grid-column: span 1;
+}
+
+.dialog-form textarea {
+  min-height: 120px;
+}
+
+@media (max-width: 600px) {
+  .dialog-form {
+    grid-template-columns: 1fr;
+  }
+
+  .dialog-form mat-form-field.field-half {
+    grid-column: 1 / -1;
+  }
 }
