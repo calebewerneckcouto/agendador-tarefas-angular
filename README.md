@@ -1,59 +1,125 @@
-# AgendadorTarefas
+# Deadline — Agendador de Tarefas
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.7.
+Frontend Angular do **Deadline Javanauta**: landing page, cadastro, login e área autenticada para gerenciar tarefas, telefones e endereços.
 
-## Development server
+O app fala com o **BFF** em `http://localhost:8083`, que orquestra as APIs de usuário, tarefas e notificações.
 
-To start a local development server, run:
+## Stack
 
-```bash
-ng serve
-```
+- Angular 22 (standalone, `inject`, signals)
+- Angular Material (tema Azure Blue) + CDK
+- HttpClient com interceptor JWT
+- Reactive Forms
+- RxJS
+- Vitest (`ng test`)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Pré-requisitos
 
-## Code scaffolding
+- Node.js 20+ e npm
+- BFF do agendador rodando em **http://localhost:8083**
+- Contas/serviços de usuário e tarefas acessíveis pelo BFF (em geral usuario `:8080` e tarefas via BFF)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Como rodar
 
 ```bash
-ng build
+npm install
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Abra [http://localhost:4200](http://localhost:4200). O `ng serve` recarrega ao salvar.
 
-## Running unit tests
+Outros comandos:
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+| Comando        | Função                          |
+|----------------|---------------------------------|
+| `npm start`    | Servidor de desenvolvimento     |
+| `npm run build`| Build de produção em `dist/`    |
+| `npm test`     | Testes unitários (Vitest)       |
 
-```bash
-ng test
+## Rotas
+
+| Rota          | Acesso        | Tela                                      |
+|---------------|---------------|-------------------------------------------|
+| `/`           | Público       | Home (recursos, preços, contato)          |
+| `/register`   | Público       | Cadastro de usuário                       |
+| `/login`      | Público       | Login                                     |
+| `/tasks`      | Autenticado   | Lista, cadastro, edição e exclusão de tarefas |
+| `/user-data`  | Autenticado   | Nome/e-mail, telefones e endereços        |
+
+Rotas autenticadas usam `authGuard`. Sem token no `localStorage`, o usuário vai para `/login`.
+
+## O que o app faz
+
+**Conta**
+
+- Cadastro (`POST /usuario`) e login (`POST /usuario/login`)
+- JWT guardado em `localStorage` (`auth_token`) e usuário em `logged_user`
+- Menu: Entrar/Cadastrar quando deslogado; avatar com **Meus dados** e **Sair** quando logado
+
+**Tarefas** (`/tasks`)
+
+- Listar tarefas do usuário
+- Cadastrar, editar e excluir
+- Data e hora no modal (datepicker + timepicker)
+- `dataEvento` enviado no formato esperado pelo BFF: `dd-MM-yyyy HH:mm:ss` (ex.: `16-09-2026 20:30:00`)
+- Status de notificação: Pendente, Notificado, Cancelado
+
+**Meus dados** (`/user-data`)
+
+- Telefones: criar, editar e excluir
+- Endereços: criar, editar, excluir e busca de CEP (`GET /usuario/endereco/{cep}`)
+
+## Integração com o BFF
+
+Base URL: `http://localhost:8083`
+
+O interceptor `authInterceptor` envia `Authorization: Bearer <token>` nas rotas autenticadas. Login e cadastro de usuário não recebem o header.
+
+**Usuário**
+
+| Método | Endpoint                         | Uso                |
+|--------|----------------------------------|--------------------|
+| POST   | `/usuario`                       | Cadastro           |
+| POST   | `/usuario/login`                 | Login (JWT)        |
+| GET    | `/usuario?email=`                | Dados do usuário   |
+| POST   | `/usuario/telefone`              | Novo telefone      |
+| PUT    | `/usuario/telefone?id=`          | Editar telefone    |
+| DELETE | `/usuario/telefone?id=`          | Excluir telefone   |
+| POST   | `/usuario/endereco`              | Novo endereço      |
+| PUT    | `/usuario/endereco?id=`          | Editar endereço    |
+| DELETE | `/usuario/endereco?id=`          | Excluir endereço   |
+| GET    | `/usuario/endereco/{cep}`        | Consulta CEP       |
+
+**Tarefas**
+
+| Método | Endpoint            | Uso              |
+|--------|---------------------|------------------|
+| GET    | `/tarefas`          | Listar           |
+| POST   | `/tarefas`          | Criar            |
+| PUT    | `/tarefas?id=`      | Atualizar        |
+| DELETE | `/tarefas?id=`      | Excluir          |
+
+## Estrutura
+
+```
+src/app/
+  core/http/          interceptor JWT
+  guards/             authGuard
+  pages/              home, login, register, tasks, user-data
+  services/           auth, user, tasks
+  shared/components/  top-menu, footer, modal-dialog, password-field
 ```
 
-## Running end-to-end tests
+Serviços principais:
 
-For end-to-end (e2e) testing, run:
+- `Auth` — token, usuário logado e `loggedIn` (signals)
+- `UserService` — login, cadastro e CRUD de telefone/endereço
+- `TasksService` — CRUD de tarefas e signal da lista
 
-```bash
-ng e2e
-```
+O modal compartilhado (`ModalDialog`) monta o formulário a partir de `DialogFieldConfig` (texto, data, hora, textarea).
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Observações
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Sem o BFF em `8083`, login, cadastro e tarefas falham no `HttpClient`.
+- Datas de tarefa **não** devem ir em ISO (`2026-09-16T20:30:00.000Z`); o backend espera `LocalDateTime` no padrão `dd-MM-yyyy HH:mm:ss`.
+- Projeto gerado com Angular CLI 22.1.7.
