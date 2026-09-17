@@ -184,6 +184,38 @@ export class UserData implements OnInit {
   }
 
 
+  alterarSenha() {
+  this.dialog.open(ModalDialog, {
+    width: '520px',
+    maxWidth: '95vw',
+    panelClass: 'app-modal-dialog-panel',
+    data: {
+      title: 'Alterar senha',
+      formConfig: [
+        { name: 'senha', label: 'Nova senha', type: 'password', validators: [Validators.required, Validators.minLength(6)] },
+        { name: 'confirmarSenha', label: 'Confirmar senha', type: 'password', validators: [Validators.required, Validators.minLength(6)] },
+      ],
+    },
+  }).afterClosed().subscribe((dados) => {
+    if (!dados) {
+      return;
+    }
+
+    const senha = String(dados['senha'] ?? '');
+    const confirmarSenha = String(dados['confirmarSenha'] ?? '');
+
+    if (senha !== confirmarSenha) {
+      console.log('As senhas não coincidem');
+      return;
+    }
+
+    this.userService.alteraSenha({ senha }).subscribe({
+      next: () => console.log('Senha alterada com sucesso'),
+      error: (error) => console.log('Erro ao alterar senha', error),
+    });
+  });
+}
+
 
 
   editarTelefone(telefone: Telefone) {

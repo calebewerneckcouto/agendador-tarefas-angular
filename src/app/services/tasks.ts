@@ -3,6 +3,8 @@ import { inject, Service, signal } from '@angular/core';
 import { Auth } from './auth';
 import { Observable, tap } from 'rxjs';
 
+export type TaskStatus = 'PENDENTE' | 'NOTIFICADO' | 'CANCELADO';
+
 export interface TasksResponse {
     id: string,
     nomeTarefa: string,
@@ -11,12 +13,13 @@ export interface TasksResponse {
     dataEvento: string,
     emailUsuario: string,
     dataAlteracao: string,
-    statusNotificacaoEnum: 'PENDENTE'|'NOTIFICADO'|'CANCELADO'
+    statusNotificacao: TaskStatus
 }
 export interface TasksPayload {
     nomeTarefa: string,
     descricao: string,
     dataEvento: string,
+    statusNotificacao?: TaskStatus,
 }
 
 @Service()
@@ -36,13 +39,16 @@ private authService = inject(Auth)
  
 
  private getHeaders(): HttpHeaders {
-    const token = this.authService.getToken();
-    return new HttpHeaders({Authorization: `${token}`})
+    const token = (this.authService.getToken() ?? '').trim();
+    const authorization = token.toLowerCase().startsWith('bearer ')
+      ? token
+      : `Bearer ${token}`;
+    return new HttpHeaders({ Authorization: authorization });
  }
 
  loadTasks():void{
     this.http.get<TasksResponse[]>(`${this.apiUrl}/tarefas`, {headers: this.getHeaders()}).subscribe({
-        next: tasks => this._tasks.set(tasks),
+        next: tasks => this._tasks.set((tasks ?? []).map(task => this.normalizeTask(task))),
         error:() => this._tasks.set([])
     })
  }
@@ -69,6 +75,24 @@ private authService = inject(Auth)
     }).pipe(
         tap(() => this.loadTasks())
     )
+ }
+
+
+ private normalizeTask(task: TasksResponse & { statusNotificacaoEnum?: TaskStatus }): TasksResponse {
+    return {
+        ...task,
+        statusNotificacao: task.statusNotificacao ?? task.statusNotificacaoEnum ?? 'PENDENTE',
+    };
+ }
+
+ updateTaskStatus(id: string, status: TaskStatus): Observable<TasksResponse> {
+    const atual = this._tasks()?.find(task => task.id === id);
+    return this.updateTask(id, {
+      nomeTarefa: atual?.nomeTarefa ?? '',
+      descricao: atual?.descricao ?? '',
+      dataEvento: atual?.dataEvento ?? '',
+      statusNotificacao: status,
+    });
  }
 
 }

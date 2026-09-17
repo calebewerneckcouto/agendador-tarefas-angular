@@ -67,6 +67,10 @@ export interface UserResponse {
     telefone?: Telefone[] | null;
 }
 
+export interface AlteraSenhaPayload{
+    senha:string;
+}
+
 @Service()
 export class UserService {
     private readonly http = inject(HttpClient);
@@ -198,6 +202,11 @@ export class UserService {
 
     setUser(data: UserResponse | null):void {
        this._user.set(data)
+    }
+
+
+    alteraSenha(body:AlteraSenhaPayload):Observable<void>{
+        return this.http.put<void>(`${this.apiUrl}/usuario/senha`,body);
     }
 
 }

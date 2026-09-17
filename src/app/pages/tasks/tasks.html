@@ -41,9 +41,15 @@
         <article class="task-item">
           <div class="task-item-top">
             <div class="task-item-title-wrap">
-              <span class="task-status" [ngClass]="statusClass(task.statusNotificacaoEnum)">
-                {{ statusLabel(task.statusNotificacaoEnum) }}
-              </span>
+              <mat-form-field appearance="outline" class="task-status-select" subscriptSizing="dynamic">
+                <mat-select
+                  [value]="task.statusNotificacao"
+                  (selectionChange)="alterarStatus(task, $event.value)">
+                  @for (status of statusOpcoes; track status) {
+                    <mat-option [value]="status">{{ statusLabel(status) }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
               <h2>{{ task.nomeTarefa }}</h2>
             </div>
             <div class="task-when">

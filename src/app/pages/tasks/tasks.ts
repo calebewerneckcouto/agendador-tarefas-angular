@@ -1,15 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { map, Observable } from 'rxjs';
 import { DialogFieldConfig, ModalDialog } from '../../shared/components/modal-dialog/modal-dialog';
 import { TasksPayload, TasksResponse, TasksService } from '../../services/tasks';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
-  imports: [NgClass, MatCardModule, MatButtonModule, MatIconModule],
+  imports: [MatCardModule, MatButtonModule, MatIconModule, MatSelectModule, MatFormFieldModule],
   selector: 'app-tasks',
   styleUrl: './tasks.scss',
   templateUrl: './tasks.html',
@@ -18,6 +19,10 @@ import { TasksPayload, TasksResponse, TasksService } from '../../services/tasks'
 export class Tasks {
 
   readonly dialog = inject(MatDialog);
+
+  readonly statusOpcoes: TasksResponse['statusNotificacao'][] = [
+    'PENDENTE', 'NOTIFICADO', 'CANCELADO',
+  ];
 
   private tasksService = inject(TasksService)
 
@@ -59,6 +64,18 @@ export class Tasks {
         error: () => console.log('Erro ao atualizar Tarefa', payload),
       });
     });
+  }
+
+
+  alterarStatus(task: TasksResponse, status: TasksResponse['statusNotificacao']) {
+    if (!task.id || task.statusNotificacao === status) {
+      return;
+    }
+
+    this.tasksService.updateTaskStatus(task.id,status).subscribe({
+      next:()=> console.log('Status Atualizado',task.id,status),
+      error: (error) => console.log('Erro ao atualizar status', error),
+    })
   }
 
   excluirTarefa(task: TasksResponse) {

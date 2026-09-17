@@ -18,7 +18,7 @@ export interface DialogFieldConfig {
   name: string;
   label: string;
   value?: string | Date | number | null;
-  type?: 'text' | 'number' | 'date' | 'time' | 'datetime' | 'textarea';
+  type?: 'text' | 'number' | 'date' | 'time' | 'datetime' | 'textarea' | 'password';
   layout?: 'full' | 'half';
   validators?: ValidatorFn[];
 }
