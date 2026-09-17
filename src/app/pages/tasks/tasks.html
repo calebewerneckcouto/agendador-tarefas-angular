@@ -6,89 +6,87 @@
       <p class="tasks-lead">Acompanhe compromissos, horários e o status de cada notificação.</p>
     </div>
     @if (hasTasks()) {
-      <button mat-flat-button (click)="cadastrarTarefa()">
-        <mat-icon>add</mat-icon>
-        Nova tarefa
-      </button>
+    <button mat-flat-button (click)="cadastrarTarefa()">
+      <mat-icon>add</mat-icon>
+      Nova tarefa
+    </button>
     }
   </header>
 
   @if (tasks() === null) {
-    <mat-card class="task-empty" appearance="outlined">
-      <mat-card-content>
-        <mat-icon class="task-empty-icon">hourglass_empty</mat-icon>
-        <h2>Carregando tarefas</h2>
-        <p>Buscando a sua agenda.</p>
-      </mat-card-content>
-    </mat-card>
+  <mat-card class="task-empty" appearance="outlined">
+    <mat-card-content>
+      <mat-icon class="task-empty-icon">hourglass_empty</mat-icon>
+      <h2>Carregando tarefas</h2>
+      <p>Buscando a sua agenda.</p>
+    </mat-card-content>
+  </mat-card>
   } @else if (!hasTasks()) {
-    <mat-card class="task-empty" appearance="outlined">
-      <mat-card-content>
-        <mat-icon class="task-empty-icon">event_available</mat-icon>
-        <h2>Nenhuma tarefa ainda</h2>
-        <p>Você ainda não tem tarefas criadas. Comece cadastrando a primeira.</p>
-        <button mat-flat-button (click)="cadastrarTarefa()">
-          <mat-icon>add</mat-icon>
-          Cadastrar minha primeira tarefa
-        </button>
-      </mat-card-content>
-    </mat-card>
+  <mat-card class="task-empty" appearance="outlined">
+    <mat-card-content>
+      <mat-icon class="task-empty-icon">event_available</mat-icon>
+      <h2>Nenhuma tarefa ainda</h2>
+      <p>Você ainda não tem tarefas criadas. Comece cadastrando a primeira.</p>
+      <button mat-flat-button (click)="cadastrarTarefa()">
+        <mat-icon>add</mat-icon>
+        Cadastrar minha primeira tarefa
+      </button>
+    </mat-card-content>
+  </mat-card>
   } @else {
-    <p class="tasks-count">{{ tasks()!.length }} {{ tasks()!.length === 1 ? 'tarefa' : 'tarefas' }}</p>
+  <p class="tasks-count">{{ tasks()!.length }} {{ tasks()!.length === 1 ? 'tarefa' : 'tarefas' }}</p>
 
-    <div class="tasks-list">
-      @for (task of tasks(); track task.id) {
-        <article class="task-item">
-          <div class="task-item-top">
-            <div class="task-item-title-wrap">
-              <mat-form-field appearance="outline" class="task-status-select" subscriptSizing="dynamic">
-                <mat-select
-                  [value]="task.statusNotificacao"
-                  (selectionChange)="alterarStatus(task, $event.value)">
-                  @for (status of statusOpcoes; track status) {
-                    <mat-option [value]="status">{{ statusLabel(status) }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-              <h2>{{ task.nomeTarefa }}</h2>
-            </div>
-            <div class="task-when">
-              <mat-icon>schedule</mat-icon>
-              <div>
-                <strong>{{ dataParte(task.dataEvento) }}</strong>
-                <span>{{ horaParte(task.dataEvento) }}</span>
-              </div>
-            </div>
-          </div>
-
-          @if (task.descricao) {
-            <p class="task-description">{{ task.descricao }}</p>
-          }
-
-          <footer class="task-meta">
-            <div class="task-meta-info">
-              <span>
-                <mat-icon>event</mat-icon>
-                Criada em {{ dataParte(task.dataCriacao) }}
-              </span>
-              @if (task.dataAlteracao) {
-                <span>
-                  <mat-icon>update</mat-icon>
-                  Atualizada em {{ dataParte(task.dataAlteracao) }}
-                </span>
+  <div class="tasks-list">
+    @for (task of tasks(); track task.id) {
+    <article class="task-item">
+      <div class="task-item-top">
+        <div class="task-item-title-wrap">
+          <mat-form-field appearance="outline" class="task-status-select" subscriptSizing="dynamic">
+            <mat-select [value]="task.statusNotificacao" (selectionChange)="alterarStatus(task, $event.value)">
+              @for (status of statusOpcoes; track status) {
+                <mat-option [value]="status">{{ statusLabel(status) }}</mat-option>
               }
-            </div>
-            <div class="task-actions">
-              <button mat-icon-button type="button" (click)="editarTarefa(task)" aria-label="Editar tarefa">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button type="button" color="warn" (click)="excluirTarefa(task)" aria-label="Excluir tarefa">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </footer>
-        </article>
+            </mat-select>
+          </mat-form-field>
+          <h2>{{ task.nomeTarefa }}</h2>
+        </div>
+        <div class="task-when">
+          <mat-icon>schedule</mat-icon>
+          <div>
+            <strong>{{ dataParte(task.dataEvento) }}</strong>
+            <span>{{ horaParte(task.dataEvento) }}</span>
+          </div>
+        </div>
+      </div>
+
+      @if (task.descricao) {
+      <p class="task-description">{{ task.descricao }}</p>
       }
-    </div>
+
+      <footer class="task-meta">
+        <div class="task-meta-info">
+          <span>
+            <mat-icon>event</mat-icon>
+            Criada em {{ dataParte(task.dataCriacao) }}
+          </span>
+          @if (task.dataAlteracao) {
+          <span>
+            <mat-icon>update</mat-icon>
+            Atualizada em {{ dataParte(task.dataAlteracao) }}
+          </span>
+          }
+        </div>
+        <div class="task-actions">
+          <button mat-icon-button type="button" (click)="editarTarefa(task)" aria-label="Editar tarefa">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button type="button" color="warn" (click)="excluirTarefa(task)" aria-label="Excluir tarefa">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </footer>
+    </article>
+    }
+  </div>
   }
 </section>
